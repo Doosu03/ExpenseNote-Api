@@ -368,9 +368,13 @@ app.post("/upload", async (req, res) => {
     // Decodificar base64 y subir
     const buffer = Buffer.from(imageBase64, "base64");
     await file.save(buffer, {
-      metadata: { contentType: "image/jpeg" },
-      public: true,
+      metadata: { 
+        contentType: "image/jpeg",
+        cacheControl: "public, max-age=31536000"
+      }
     });
+    
+    await file.makePublic();
 
     // Obtener URL pública
     const publicUrl = `https://storage.googleapis.com/${bucket.name}/receipts/${name}`;
